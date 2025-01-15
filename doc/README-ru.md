@@ -12,7 +12,7 @@
   <a href="#установка">Установка</a> •
   <a href="#кастомизация">Кастомизация</a> •
   <a href="#цели-и-альтернативы">Цели и альтернативы </a><br>
-  [<a href="../README.md">English]
+  [<a href="../README.md">English</a>]
   [<a href="README-zh.md">中文</a>]
   [<a href="README-ja.md">日本語</a>]
   [<a href="README-ko.md">한국어</a>]
@@ -160,7 +160,7 @@ man 2 select
 
 ## Установка
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/bat-cat.svg)](https://repology.org/project/bat-cat/versions)
+[![Packaging status](https://repology.org/badge/vertical-allrepos/bat-cat.svg?columns=3&exclude_unsupported=1)](https://repology.org/project/bat-cat/versions)
 
 ### Ubuntu (с помощью `apt`)
 *... и другие дистрибутивы основанные на Debian.*
@@ -201,7 +201,7 @@ apk add bat
 
 ### Arch Linux
 
-Вы можете установить [`bat`](https://www.archlinux.org/packages/community/x86_64/bat/) из официального источника:
+Вы можете установить [`bat`](https://www.archlinux.org/packages/extra/x86_64/bat/) из официального источника:
 
 ```bash
 pacman -S bat
@@ -344,7 +344,7 @@ ansible-galaxy install aeimer.install_bat
 
 ### Из исходников
 
-Если вы желаете установить `bat` из исходников, вам понадобится Rust 1.70.0 или выше. После этого используйте `cargo`, чтобы все скомпилировать:
+Если вы желаете установить `bat` из исходников, вам понадобится Rust 1.74.0 или выше. После этого используйте `cargo`, чтобы все скомпилировать:
 
 ```bash
 cargo install --locked bat

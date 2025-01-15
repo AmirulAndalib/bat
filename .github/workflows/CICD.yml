@@ -152,6 +152,7 @@ jobs:
     name: cargo audit
     runs-on: ubuntu-latest
     steps:
+      - run: cargo install cargo-audit --locked
       - uses: actions/checkout@v4
       - run: cargo audit
 
@@ -163,17 +164,19 @@ jobs:
       fail-fast: false
       matrix:
         job:
-          - { target: aarch64-unknown-linux-gnu   , os: ubuntu-20.04, use-cross: true }
-          - { target: arm-unknown-linux-gnueabihf , os: ubuntu-20.04, use-cross: true }
-          - { target: arm-unknown-linux-musleabihf, os: ubuntu-20.04, use-cross: true }
-          - { target: i686-pc-windows-msvc        , os: windows-2019                  }
-          - { target: i686-unknown-linux-gnu      , os: ubuntu-20.04, use-cross: true }
-          - { target: i686-unknown-linux-musl     , os: ubuntu-20.04, use-cross: true }
-          - { target: x86_64-apple-darwin         , os: macos-12                      }
-          - { target: x86_64-pc-windows-gnu       , os: windows-2019                  }
-          - { target: x86_64-pc-windows-msvc      , os: windows-2019                  }
-          - { target: x86_64-unknown-linux-gnu    , os: ubuntu-20.04, use-cross: true }
-          - { target: x86_64-unknown-linux-musl   , os: ubuntu-20.04, use-cross: true }
+          - { target: aarch64-unknown-linux-musl  , os: ubuntu-20.04, dpkg_arch: arm64,            use-cross: true }
+          - { target: aarch64-unknown-linux-gnu   , os: ubuntu-20.04, dpkg_arch: arm64,            use-cross: true }
+          - { target: arm-unknown-linux-gnueabihf , os: ubuntu-20.04, dpkg_arch: armhf,            use-cross: true }
+          - { target: arm-unknown-linux-musleabihf, os: ubuntu-20.04, dpkg_arch: musl-linux-armhf, use-cross: true }
+          - { target: i686-pc-windows-msvc        , os: windows-2019,                                              }
+          - { target: i686-unknown-linux-gnu      , os: ubuntu-20.04, dpkg_arch: i686,             use-cross: true }
+          - { target: i686-unknown-linux-musl     , os: ubuntu-20.04, dpkg_arch: musl-linux-i686,  use-cross: true }
+          - { target: x86_64-apple-darwin         , os: macos-13,                                                  }
+          - { target: aarch64-apple-darwin        , os: macos-14,                                                  }
+          - { target: x86_64-pc-windows-gnu       , os: windows-2019,                                              }
+          - { target: x86_64-pc-windows-msvc      , os: windows-2019,                                              }
+          - { target: x86_64-unknown-linux-gnu    , os: ubuntu-20.04, dpkg_arch: amd64,            use-cross: true }
+          - { target: x86_64-unknown-linux-musl   , os: ubuntu-20.04, dpkg_arch: musl-linux-amd64, use-cross: true }
     env:
       BUILD_CMD: cargo
     steps:
@@ -337,16 +340,7 @@ jobs:
         DPKG_CONFLICTS=${{ needs.crate_metadata.outputs.name }}-musl
         case ${{ matrix.job.target }} in *-musl) DPKG_BASENAME=${{ needs.crate_metadata.outputs.name }}-musl ; DPKG_CONFLICTS=${{ needs.crate_metadata.outputs.name }} ;; esac;
         DPKG_VERSION=${{ needs.crate_metadata.outputs.version }}
-
-        unset DPKG_ARCH
-        case ${{ matrix.job.target }} in
-          aarch64-*-linux-*) DPKG_ARCH=arm64 ;;
-          arm-*-linux-*hf) DPKG_ARCH=armhf ;;
-          i686-*-linux-*) DPKG_ARCH=i686 ;;
-          x86_64-*-linux-*) DPKG_ARCH=amd64 ;;
-          *) DPKG_ARCH=notset ;;
-        esac;
-
+        DPKG_ARCH="${{ matrix.job.dpkg_arch }}"
         DPKG_NAME="${DPKG_BASENAME}_${DPKG_VERSION}_${DPKG_ARCH}.deb"
         echo "DPKG_NAME=${DPKG_NAME}" >> $GITHUB_OUTPUT
 
@@ -453,7 +447,7 @@ jobs:
         echo "IS_RELEASE=${IS_RELEASE}" >> $GITHUB_OUTPUT
 
     - name: Publish archives and packages
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       if: steps.is-release.outputs.IS_RELEASE
       with:
         files: |
