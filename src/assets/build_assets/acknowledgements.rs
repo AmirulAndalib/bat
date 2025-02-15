@@ -60,7 +60,7 @@ fn to_path_and_stem(source_dir: &Path, entry: DirEntry) -> Option<PathAndStem> {
 fn handle_file(path_and_stem: &PathAndStem) -> Result<Option<String>> {
     if path_and_stem.stem == "NOTICE" {
         handle_notice(&path_and_stem.path)
-    } else if path_and_stem.stem.to_ascii_uppercase() == "LICENSE" {
+    } else if path_and_stem.stem.eq_ignore_ascii_case("LICENSE") {
         handle_license(&path_and_stem.path)
     } else {
         Ok(None)
@@ -80,7 +80,7 @@ fn handle_license(path: &Path) -> Result<Option<String>> {
     } else if license_not_needed_in_acknowledgements(&license_text) {
         Ok(None)
     } else {
-        Err(format!("ERROR: License is of unknown type: {:?}", path).into())
+        Err(format!("ERROR: License is of unknown type: {path:?}").into())
     }
 }
 
@@ -125,7 +125,7 @@ fn append_to_acknowledgements(
     relative_path: &str,
     license_text: &str,
 ) {
-    write!(acknowledgements, "## {}\n\n{}", relative_path, license_text).ok();
+    write!(acknowledgements, "## {relative_path}\n\n{license_text}").ok();
 
     // Make sure the last char is a newline to not mess up formatting later
     if acknowledgements

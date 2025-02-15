@@ -4,16 +4,120 @@
 
 ## Bugfixes
 
+- Fix `BAT_THEME_DARK` and `BAT_THEME_LIGHT` being ignored, see issue #3171 and PR #3168 (@bash)
+- Prevent `--list-themes` from outputting default theme info to stdout when it is piped, see #3189 (@einfachIrgendwer0815)
+- Rename some submodules to fix Dependabot submodule updates, see issue #3198 and PR #3201 (@victor-gp)
+
 ## Other
 
-- Upgrade to Rust 2021 edition #2748 (@cyqsimon)
+- Work around build failures when building `bat` from vendored sources #3179 (@dtolnay)
 
 ## Syntaxes
+
+- Add syntax mapping for `paru` configuration files #3182 (@cyqsimon)
+- Add support for [Idris 2 programming language](https://www.idris-lang.org/) #3150 (@buzden)
+- Add syntax mapping for `nix`'s '`flake.lock` lockfiles #3196 (@odilf)
+- Improvements to CSV/TSV highlighting, with autodetection of delimiter and support for TSV files, see #3186 (@keith-
+- Improve (Sys)log error highlighting, see #3205 (@keith-hall)
+- Map `ndjson` extension to JSON syntax, see #3209 (@keith-hall)
 
 ## Themes
 
 ## `bat` as a library
 
+# v0.25.0
+
+## Features
+
+- Set terminal title to file names when Paging is not Paging::Never #2807 (@Oliver-Looney)
+- `bat --squeeze-blank`/`bat -s` will now squeeze consecutive empty lines, see #1441 (@eth-p) and #2665 (@einfachIrgendwer0815)
+- `bat --squeeze-limit` to set the maximum number of empty consecutive when using `--squeeze-blank`, see #1441 (@eth-p) and #2665 (@einfachIrgendwer0815)
+- `PrettyPrinter::squeeze_empty_lines` to support line squeezing for bat as a library, see #1441 (@eth-p) and #2665 (@einfachIrgendwer0815)
+- Syntax highlighting for JavaScript files that start with `#!/usr/bin/env bun` #2913 (@sharunkumar)
+- `bat --strip-ansi={never,always,auto}` to remove ANSI escape sequences from bat's input, see #2999 (@eth-p)
+- Add or remove individual style components without replacing all styles #2929 (@eth-p)
+- Automatically choose theme based on the terminal's color scheme, see #2896 (@bash)
+- Add option `--binary=as-text` for printing binary content, see issue #2974 and PR #2976 (@einfachIrgendwer0815)
+- Make shell completions available via `--completion <shell>`, see issue #2057 and PR #3126 (@einfachIrgendwer0815)
+- Syntax highlighting for puppet code blocks within Markdown files, see #3152 (@liliwilson)
+
+## Bugfixes
+
+- Fix long file name wrapping in header, see #2835 (@FilipRazek)
+- Fix `NO_COLOR` support, see #2767 (@acuteenvy)
+- Fix handling of inputs with OSC ANSI escape sequences, see #2541 and #2544 (@eth-p)
+- Fix handling of inputs with combined ANSI color and attribute sequences, see #2185 and #2856 (@eth-p)
+- Fix panel width when line 10000 wraps, see #2854 (@eth-p)
+- Fix compile issue of `time` dependency caused by standard library regression #3045 (@cyqsimon)
+- Fix override behavior of --plain and --paging, see issue #2731 and PR #3108 (@einfachIrgendwer0815)
+- Fix bugs in `$LESSOPEN` support, see #2805 (@Anomalocaridid)
+
+## Other
+
+- Upgrade to Rust 2021 edition #2748 (@cyqsimon)
+- Refactor and cleanup build script #2756 (@cyqsimon)
+- Checks changelog has been written to for PRs in CI #2766 (@cyqsimon)
+  - Use GitHub API to get correct PR submitter #2791 (@cyqsimon)
+- Minor benchmark script improvements #2768 (@cyqsimon)
+- Update Arch Linux package URL in README files #2779 (@brunobell)
+- Update and improve `zsh` completion, see #2772 (@okapia)
+- More extensible syntax mapping mechanism #2755 (@cyqsimon)
+- Use proper Architecture for Debian packages built for musl, see #2811 (@Enselic)
+- Pull in fix for unsafe-libyaml security advisory, see #2812 (@dtolnay)
+- Update git-version dependency to use Syn v2, see #2816 (@dtolnay)
+- Update git2 dependency to v0.18.2, see #2852 (@eth-p)
+- Improve performance when color output disabled, see #2397 and #2857 (@eth-p)
+- Relax syntax mapping rule restrictions to allow brace expansion #2865 (@cyqsimon)
+- Apply clippy fixes #2864 (@cyqsimon)
+- Faster startup by offloading glob matcher building to a worker thread #2868 (@cyqsimon)
+- Display which theme is the default one in basic output (no colors), see #2937 (@sblondon)
+- Display which theme is the default one in colored output, see #2838 (@sblondon)
+- Add aarch64-apple-darwin ("Apple Silicon") binary tarballs to releases, see #2967 (@someposer)
+- Update the Lisp syntax, see #2970 (@ccqpein)
+- Use bat's ANSI iterator during tab expansion, see #2998 (@eth-p)
+- Support 'statically linked binary' for aarch64 in 'Release' page, see #2992 (@tzq0301)
+- Update options in shell completions and the man page of `bat`, see #2995 (@akinomyoga)
+- Update nix dev-dependency to v0.29.0, see #3112 (@decathorpe)
+- Bump MSRV to [1.74](https://blog.rust-lang.org/2023/11/16/Rust-1.74.0.html), see #3154 (@keith-hall)
+- Update clircle dependency to remove winapi transitive dependency, see #3113 (@niklasmohrin)
+
+## Syntaxes
+
+- `cmd-help`: scope subcommands followed by other terms, and other misc improvements, see #2819 (@victor-gp)
+- Upgrade JQ syntax, see #2820 (@dependabot[bot])
+- Add syntax mapping for quadman quadlets #2866 (@cyqsimon)
+- Map containers .conf files to TOML syntax #2867 (@cyqsimon)
+- Associate `.xsh` files with `xonsh` syntax that is Python, see #2840 (@anki-code)
+- Associate JSON with Comments `.jsonc` with `json` syntax, see #2795 (@mxaddict)
+- Associate JSON-LD `.jsonld` files with `json` syntax, see #3037 (@vorburger)
+- Associate `.textproto` files with `ProtoBuf` syntax, see #3038 (@vorburger)
+- Associate GeoJSON `.geojson` files with `json` syntax, see #3084 (@mvaaltola)
+- Associate `.aws/{config,credentials}`, see #2795 (@mxaddict)
+- Associate Wireguard config `/etc/wireguard/*.conf`, see #2874 (@cyqsimon)
+- Add support for [CFML](https://www.adobe.com/products/coldfusion-family.html), see #3031 (@brenton-at-pieces)
+- Map `*.mkd` files to `Markdown` syntax, see issue #3060 and PR #3061 (@einfachIrgendwer0815)
+- Add syntax mapping for CITATION.cff, see #3103 (@Ugzuzg)
+- Add syntax mapping for kubernetes config files #3049 (@cyqsimon)
+- Adds support for pipe delimiter for CSV #3115 (@pratik-m)
+- Add syntax mapping for `/etc/pacman.conf` #2961 (@cyqsimon)
+- Associate `uv.lock` with `TOML` syntax, see #3132 (@fepegar)
+
+## Themes
+
+- Patched/improved themes for better Manpage syntax highlighting support, see #2994 (@keith-hall).
+
+## `bat` as a library
+
+- Changes to `syntax_mapping::SyntaxMapping` #2755 (@cyqsimon)
+  - `SyntaxMapping::get_syntax_for` is now correctly public
+  - [BREAKING] `SyntaxMapping::{empty,builtin}` are removed; use `SyntaxMapping::new` instead
+  - [BREAKING] `SyntaxMapping::mappings` is replaced by `SyntaxMapping::{builtin,custom,all}_mappings`
+- Make `Controller::run_with_error_handler`'s error handler `FnMut`, see #2831 (@rhysd)
+- Improve compile time by 20%, see #2815 (@dtolnay)
+- Add `theme::theme` for choosing an appropriate theme based on the
+  terminal's color scheme, see #2896 (@bash)
+  - [BREAKING] Remove `HighlightingAssets::default_theme`. Use `theme::default_theme` instead.
+- Add `PrettyPrinter::print_with_writer` for custom output destinations, see #3070 (@kojix2)
 
 # v0.24.0
 
@@ -52,6 +156,7 @@
 - Update `Julia` syntax, see #2553 (@dependabot)
 - add `NSIS` support, see #2577 (@idleberg)
 - Update `ssh-config`, see #2697 (@mrmeszaros)
+- Add syntax mapping `*.debdiff` => `diff`, see #2947 (@jacg)
 
 ## `bat` as a library
 
